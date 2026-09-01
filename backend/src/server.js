@@ -11,7 +11,7 @@ const app = express();
 
 const __dirname = path.resolve()
 
-app.use(express.json())
+
 
 console.log(
     "Clerk secret configured:",
@@ -29,6 +29,8 @@ app.use(
     clerkMiddleware({
         secret: process.env.CLERK_SECRET_KEY,
     }));
+
+app.use(express.json())
 
 app.use("/api/inngest", serve({client:inngest, functions:functions}));
 
