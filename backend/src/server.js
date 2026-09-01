@@ -5,6 +5,7 @@ import {connectDB} from "./config/db.js";
 import { clerkMiddleware } from "@clerk/express";
 import { serve } from "inngest/express"
 import { functions, inngest } from "./config/inngest.js"
+import cors from "cors";
 
 
 const app = express();
@@ -24,6 +25,8 @@ console.log(
         ? process.env.CLERK_SECRET_KEY.substring(0, 7)
         : "MISSING"
 );
+
+app.use(cors());
 
 app.use(
     clerkMiddleware({
