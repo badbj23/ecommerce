@@ -17,20 +17,22 @@ const syncUser = inngest.createFunction(
     async ({ event }) => {
         await connectDB();
 
-        const {
-            id,
-            email_addresses,
-            first_name,
-            last_name,
-            image_url,
-        } = event.data;
+        const data = event?.data;
+        const clerkId = data.id;
+        const email = data.email_addresses?.[0]?.email_address;
 
+        const existingUser = await User.findOne({ clerkId });
+
+        if (existingUser) {
+            console.log("User already exists:", clerkId);
+            return;
+        }
         const newUser = {
-            clerkId: id,
-            email: email_addresses?.[0]?.email_address || "",
+            clerkId,
+            email,
             name: `${first_name || ""} ${last_name || ""}`.trim() || "User",
-            image_url: image_url || "",
-            addresses: [],
+            image: image_url || "",
+            addys: [],
             wishlist: [],
         };
 
