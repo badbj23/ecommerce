@@ -17,16 +17,34 @@ const syncUser = inngest.createFunction(
     async ({ event }) => {
         await connectDB();
 
-        const data = event?.data;
-        const clerkId = data.id;
-        const email = data.email_addresses?.[0]?.email_address;
+        const {
+            id,
+            email_addresses,
+            first_name,
+            last_name,
+            image_url,
+        } = event.data;
 
-        const existingUser = await User.findOne({ clerkId });
+        const clerkId = id;
+        const email = email_addresses?.[0]?.email_address;
+
+        if (!clerkId) {
+            throw new Error("Missing Clerk ID from Inngest event");
+        }
+
+        if (!email) {
+            throw new Error("Missing email from Inngest event");
+        }
+
+        const existingUser = await User.findOne({
+            clerkId,
+        });
 
         if (existingUser) {
             console.log("User already exists:", clerkId);
             return;
         }
+
         const newUser = {
             clerkId,
             email,
@@ -36,7 +54,15 @@ const syncUser = inngest.createFunction(
             wishlist: [],
         };
 
+        console.log("Creating user:", {
+            clerkId,
+            email,
+            name: newUser.name,
+        });
+
         await User.create(newUser);
+
+        console.log("User created successfully:", clerkId);
     }
 );
 
@@ -56,10 +82,9 @@ const deleteUser = inngest.createFunction(
         await User.deleteOne({
             clerkId: id,
         });
+
+        console.log("User deleted successfully:", id);
     }
 );
 
-export const functions = [
-    syncUser,
-    deleteUser,
-];
+export const functions = [syncUser, deleteUser];
