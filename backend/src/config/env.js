@@ -5,6 +5,7 @@ dotenv.config()
 export const ENV = {
     NODE_ENV: process.env.NODE_ENV,
     PORT: process.env.PORT,
+    DB_Pass: process.env.DB_PASS,
     DB_URL: process.env.DB_URL,
     CLERK_PUBLISHABLE_KEY: process.env.CLERK_PUBLISHABLE_KEY,
     CLOUD_API_KEY:process.env.CLOUD_API_KEY,
