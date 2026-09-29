@@ -15,22 +15,28 @@ const syncUser = inngest.createFunction(
     },
 
     async ({ event }) => {
+        console.log("========== INNGEST EVENT ==========");
+        console.log(JSON.stringify(event, null, 2));
+        console.log("===================================");
+
         await connectDB();
 
-        const {
-            id,
-            email_addresses,
-            first_name,
-            last_name,
-            image_url,
-        } = event.data;
+        const data = event?.data;
 
-        const clerkId = id;
-        const email = email_addresses?.[0]?.email_address;
+        console.log("EVENT DATA:");
+        console.log(JSON.stringify(data, null, 2));
+
+        const clerkId = data?.id;
+
+        console.log("CLERK ID:", clerkId);
 
         if (!clerkId) {
-            throw new Error("Missing Clerk ID from Inngest event");
+            throw new Error(
+                `Missing Clerk ID. Received event data: ${JSON.stringify(data)}`
+            );
         }
+
+        const email = data?.email_addresses?.[0]?.email_address;
 
         if (!email) {
             throw new Error("Missing email from Inngest event");
@@ -48,17 +54,13 @@ const syncUser = inngest.createFunction(
         const newUser = {
             clerkId,
             email,
-            name: `${first_name || ""} ${last_name || ""}`.trim() || "User",
-            image: image_url || "",
+            name:
+                `${data?.first_name || ""} ${data?.last_name || ""}`.trim() ||
+                "User",
+            image: data?.image_url || "",
             addys: [],
             wishlist: [],
         };
-
-        console.log("Creating user:", {
-            clerkId,
-            email,
-            name: newUser.name,
-        });
 
         await User.create(newUser);
 
