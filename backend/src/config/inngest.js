@@ -10,61 +10,53 @@ const syncUser = inngest.createFunction(
     {
         id: "sync-user",
         triggers: {
-            event: "user.created",
+            event: "clerk/user.created",
         },
     },
 
     async ({ event }) => {
-        console.log("========== INNGEST EVENT ==========");
-        console.log(JSON.stringify(event, null, 2));
-        console.log("===================================");
-
         await connectDB();
 
-        const data = event?.data;
+        console.log(
+            "Clerk user.created event:",
+            JSON.stringify(event.data, null, 2)
+        );
 
-        console.log("EVENT DATA:");
-        console.log(JSON.stringify(data, null, 2));
+        const { user } = event.data;
 
-        const clerkId = data?.id;
-
-        console.log("CLERK ID:", clerkId);
-
-        if (!clerkId) {
-            throw new Error(
-                `Missing Clerk ID. Received event data: ${JSON.stringify(data)}`
-            );
+        if (!user?.id) {
+            throw new Error("Missing Clerk user ID from event");
         }
 
-        const email = data?.email_addresses?.[0]?.email_address;
+        const email = user.email_addresses?.[0]?.email_address;
 
         if (!email) {
-            throw new Error("Missing email from Inngest event");
+            throw new Error("Missing email from Clerk user");
         }
 
         const existingUser = await User.findOne({
-            clerkId,
+            clerkId: user.id,
         });
 
         if (existingUser) {
-            console.log("User already exists:", clerkId);
+            console.log("User already exists:", user.id);
             return;
         }
 
         const newUser = {
-            clerkId,
+            clerkId: user.id,
             email,
             name:
-                `${data?.first_name || ""} ${data?.last_name || ""}`.trim() ||
+                `${user.first_name || ""} ${user.last_name || ""}`.trim() ||
                 "User",
-            image: data?.image_url || "",
+            image: user.image_url || "",
             addys: [],
             wishlist: [],
         };
 
         await User.create(newUser);
 
-        console.log("User created successfully:", clerkId);
+        console.log("User created successfully:", user.id);
     }
 );
 
