@@ -10,7 +10,7 @@ const syncUser = inngest.createFunction(
     {
         id: "sync-user",
         triggers: {
-            event: "clerk/user.created",
+            event: "webhook-integration/user.created",
         },
     },
 
@@ -22,7 +22,7 @@ const syncUser = inngest.createFunction(
             JSON.stringify(event.data, null, 2)
         );
 
-        const { user } = event.data;
+        const user  = event.data;
 
         if (!user?.id) {
             throw new Error("Missing Clerk user ID from event");
@@ -64,7 +64,7 @@ const deleteUser = inngest.createFunction(
     {
         id: "delete-user",
         triggers: {
-            event: "clerk/user.deleted",
+            event: "webhook-integration/user.deleted",
         },
     },
 
