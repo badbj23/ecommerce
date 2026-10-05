@@ -34,43 +34,45 @@ app.use(
         secret: process.env.CLERK_SECRET_KEY,
     }));
 
+app.post(
+    "/api/webhooks/clerk",
+    express.raw({ type: "application/json" }),
+    async (req, res) => {
+        try {
+            const wh = new Webhook(process.env.CLERK_WEBHOOK_SECRET);
 
-app.post("/api/webhooks/clerk", express.raw({ type: "application/json" }), async (req, res) => {
-    try {
-        const wh = new Webhook(process.env.CLERK_WEBHOOK_SECRET);
-
-        const event = wh.verify(req.body, {
-            "svix-id": req.headers["svix-id"],
-            "svix-timestamp": req.headers["svix-timestamp"],
-            "svix-signature": req.headers["svix-signature"],
-        });
-
-        console.log("Clerk webhook received:", event.type);
-
-        if (event.type === "user.created") {
-            await inngest.send({
-                name: "clerk/user.created",
-                data: {
-                    user: event.data,
-                },
+            const event = wh.verify(req.body, {
+                "svix-id": req.headers["svix-id"],
+                "svix-timestamp": req.headers["svix-timestamp"],
+                "svix-signature": req.headers["svix-signature"],
             });
-        }
 
-        if (event.type === "user.deleted") {
-            await inngest.send({
-                name: "clerk/user.deleted",
-                data: {
-                    user: event.data,
-                },
-            });
-        }
+            console.log("Clerk webhook received:", event.type);
 
-        res.status(200).json({ success: true });
-    } catch (error) {
-        console.error("Clerk webhook error:", error);
-        res.status(400).json({ error: "Invalid webhook" });
+            if (event.type === "user.created") {
+                await inngest.send({
+                    name: "clerk/user.created",
+                    data: event.data,
+                });
+            }
+
+            if (event.type === "user.deleted") {
+                await inngest.send({
+                    name: "clerk/user.deleted",
+                    data: event.data,
+                });
+            }
+
+            res.status(200).json({ success: true });
+        } catch (error) {
+            console.error("Clerk webhook error:", error);
+            res.status(400).json({ error: "Invalid webhook" });
+        }
     }
-});
+);
+
+
+
 app.use(express.json())
 app.use("/api/inngest", serve({client:inngest, functions:functions}));
 
