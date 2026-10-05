@@ -51,14 +51,14 @@ app.post(
 
             if (event.type === "user.created") {
                 await inngest.send({
-                    name: "clerk/user.created",
+                    name: "webhook-integration/user.created",
                     data: event.data,
                 });
             }
 
             if (event.type === "user.deleted") {
                 await inngest.send({
-                    name: "clerk/user.deleted",
+                    name: "webhook-integration/user.deleted",
                     data: event.data,
                 });
             }

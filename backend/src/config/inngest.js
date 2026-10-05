@@ -10,7 +10,7 @@ const syncUser = inngest.createFunction(
     {
         id: "sync-user",
         triggers: {
-            event: "clerk/user.created",
+            event: "webhook-integration/user.created",
         },
     },
 
@@ -64,7 +64,7 @@ const deleteUser = inngest.createFunction(
     {
         id: "delete-user",
         triggers: {
-            event: "clerk/user.deleted",
+            event: "webhook-integration/user.deleted",
         },
     },
 
