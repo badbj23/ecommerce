@@ -14,7 +14,7 @@ const app = express();
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.resolve();
-const rtpath = path.join(__dirname, "index.html");
+const rtpath = path.join(__dirname, "admin/index.html");
 
 console.log(
     "Clerk secret configured:",
@@ -104,7 +104,7 @@ if (ENV.NODE_ENV === "production") {
     app.use(express.static(adminPath));
 
     app.get("/{*any}", (req, res) => {
-        res.sendFile(path.join(adminPath, "index.html"));
+        res.sendFile(path.join(adminPath, "admin/index.html"));
     });
 }
 
