@@ -8,6 +8,7 @@ import { functions, inngest } from "./config/inngest.js"
 import cors from "cors";
 import { Webhook } from "svix";
 import {fileURLToPath} from "url";
+import fs from "fs";
 
 
 const app = express();
@@ -86,6 +87,11 @@ if (ENV.NODE_ENV === "production") {
     const adminPath = path.join(__dirname, "../../admin/dist");
 
     console.log("Admin path:", adminPath);
+    console.log(
+        "Admin exists:",
+        fs.existsSync(adminPath)
+    );
+
 
     app.use(express.static(adminPath));
 
