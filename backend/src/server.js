@@ -7,10 +7,12 @@ import { serve } from "inngest/express"
 import { functions, inngest } from "./config/inngest.js"
 import cors from "cors";
 import { Webhook } from "svix";
+import {fileURLToPath} from "url";
 
 
 const app = express();
 
+const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.resolve()
 
 
@@ -80,11 +82,16 @@ app.get("/api/health", (req, res) => {
     res.status(200).json({message: "Success" })
 });
 
-if(ENV.NODE_ENV === "production") {
-    app.use(express.static(path.join(__dirname, "../admin/dist")))
+if (ENV.NODE_ENV === "production") {
+    const adminPath = path.join(__dirname, "../../admin/dist");
+
+    console.log("Admin path:", adminPath);
+
+    app.use(express.static(adminPath));
+
     app.get("/{*any}", (req, res) => {
-        res.sendFile(path.join(__dirname, "../admin", "dist", "index.html"));
-    })
+        res.sendFile(path.join(adminPath, "index.html"));
+    });
 }
 
 const startServer = async () => {
