@@ -90,10 +90,8 @@ app.get("/api/health", (req, res) => {
 
 // ROOT ROUTE
 app.get("/", (req, res) => {
-    res.status(200).json({
-        message: "Ecommerce API is running",
-        status: "success"
-    });
+    res.sendFile(path.join(adminPath, "index.html"));
+
 });
 
 if (ENV.NODE_ENV === "production") {
