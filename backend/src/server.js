@@ -14,6 +14,7 @@ const app = express();
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.resolve();
+const rtpath = path.join(__dirname, "index.html");
 
 console.log(
     "Clerk secret configured:",
@@ -90,7 +91,7 @@ app.get("/api/health", (req, res) => {
 
 // ROOT ROUTE
 app.get("/", (req, res) => {
-    res.sendFile(path.join("index.html"));
+    res.sendFile(path.join(rtpath, "admin/index.html"));
 
 });
 
