@@ -13,8 +13,10 @@ import fs from "fs";
 const app = express();
 
 const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.resolve();
-const rtpath = path.join(__dirname, "admin/index.html");
+const __dirname = path.dirname(__filename);
+
+const adminPath = path.join(__dirname, "../../admin/dist");
+const rtpath = path.join(adminPath, "index.html");
 
 console.log(
     "Clerk secret configured:",
@@ -91,7 +93,7 @@ app.get("/api/health", (req, res) => {
 
 // ROOT ROUTE
 app.get("/", (req, res) => {
-    res.sendFile(path.join(rtpath, "admin/index.html"));
+    res.sendFile(rtpath);
 
 });
 
@@ -104,7 +106,7 @@ if (ENV.NODE_ENV === "production") {
     app.use(express.static(adminPath));
 
     app.get("/{*any}", (req, res) => {
-        res.sendFile(path.join(adminPath, "admin/index.html"));
+        res.sendFile(rtpath);
     });
 }
 
