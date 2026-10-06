@@ -1,22 +1,19 @@
 import express from 'express';
 import path from 'path';
 import { ENV } from './config/env.js';
-import {connectDB} from "./config/db.js";
+import { connectDB } from "./config/db.js";
 import { clerkMiddleware } from "@clerk/express";
-import { serve } from "inngest/express"
-import { functions, inngest } from "./config/inngest.js"
+import { serve } from "inngest/express";
+import { functions, inngest } from "./config/inngest.js";
 import cors from "cors";
 import { Webhook } from "svix";
-import {fileURLToPath} from "url";
+import { fileURLToPath } from "url";
 import fs from "fs";
-
 
 const app = express();
 
 const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.resolve()
-
-
+const __dirname = path.resolve();
 
 console.log(
     "Clerk secret configured:",
@@ -35,7 +32,8 @@ app.use(cors());
 app.use(
     clerkMiddleware({
         secret: process.env.CLERK_SECRET_KEY,
-    }));
+    })
+);
 
 app.post(
     "/api/webhooks/clerk",
@@ -74,24 +72,35 @@ app.post(
     }
 );
 
+app.use(express.json());
 
-
-app.use(express.json())
-app.use("/api/inngest", serve({client:inngest, functions:functions}));
+app.use(
+    "/api/inngest",
+    serve({
+        client: inngest,
+        functions: functions,
+    })
+);
 
 app.get("/api/health", (req, res) => {
-    res.status(200).json({message: "Success" })
+    res.status(200).json({
+        message: "Success"
+    });
+});
+
+// ROOT ROUTE
+app.get("/", (req, res) => {
+    res.status(200).json({
+        message: "Ecommerce API is running",
+        status: "success"
+    });
 });
 
 if (ENV.NODE_ENV === "production") {
     const adminPath = path.join(__dirname, "../../admin/dist");
 
     console.log("Admin path:", adminPath);
-    console.log(
-        "Admin exists:",
-        fs.existsSync(adminPath)
-    );
-
+    console.log("Admin exists:", fs.existsSync(adminPath));
 
     app.use(express.static(adminPath));
 
@@ -102,8 +111,10 @@ if (ENV.NODE_ENV === "production") {
 
 const startServer = async () => {
     await connectDB();
+
     app.listen(ENV.PORT, () => {
         console.log("Server started");
-    })
+    });
 };
+
 startServer();
