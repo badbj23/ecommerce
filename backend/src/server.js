@@ -90,7 +90,7 @@ app.get("/api/health", (req, res) => {
 
 // ROOT ROUTE
 app.get("/", (req, res) => {
-    res.sendFile(path.join(__filename, "index.html"));
+    res.sendFile(path.join("index.html"));
 
 });
 
