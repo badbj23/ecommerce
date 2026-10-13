@@ -94,6 +94,7 @@ app.post(
 );
 
 app.use(express.json());
+app.use(express.static(adminPath));
 
 app.use(
     "/api/inngest",
