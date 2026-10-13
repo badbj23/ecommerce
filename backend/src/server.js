@@ -18,6 +18,24 @@ const __dirname = path.dirname(__filename);
 const adminPath = path.join(__dirname, "../../admin/dist");
 const rtpath = path.join(adminPath, "index.html");
 
+
+console.log("=== FRONTEND DIAGNOSTICS ===");
+console.log("NODE_ENV:", ENV.NODE_ENV);
+console.log("Current directory:", process.cwd());
+console.log("Server directory:", __dirname);
+console.log("Admin path:", adminPath);
+console.log("Admin directory exists:", fs.existsSync(adminPath));
+console.log("Index exists:", fs.existsSync(adminIndex));
+
+const assetsPath = path.join(adminPath, "assets");
+console.log("Assets directory exists:", fs.existsSync(assetsPath));
+
+if (fs.existsSync(assetsPath)) {
+    console.log("Asset files:", fs.readdirSync(assetsPath));
+}
+
+console.log("=== END DIAGNOSTICS ===");
+
 console.log(
     "Clerk secret configured:",
     Boolean(process.env.CLERK_SECRET_KEY)
