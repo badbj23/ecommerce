@@ -25,7 +25,7 @@ console.log("Current directory:", process.cwd());
 console.log("Server directory:", __dirname);
 console.log("Admin path:", adminPath);
 console.log("Admin directory exists:", fs.existsSync(adminPath));
-console.log("Index exists:", fs.existsSync(adminIndex));
+console.log("Index exists:", fs.existsSync(rtpath));
 
 const assetsPath = path.join(adminPath, "assets");
 console.log("Assets directory exists:", fs.existsSync(assetsPath));
