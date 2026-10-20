@@ -1,7 +1,7 @@
 import cloudinary from "../config/cloud.js";
 import {Product} from "../models/product.model.js";
 import {Order} from "../models/order.model.js";
-import {User} from "@clerk/express";
+import {User} from "../models/user.model.js";
 
 export async function createProduct(req, res) {
     try{
