@@ -1,8 +1,8 @@
 import { Router } from "express";
 import {
-    createProduct,
+    createProduct, getAllCustos,
     getAllOrders,
-    getAllProducts,
+    getAllProducts, getStats,
     updateOrder,
     updateProduct
 } from "../controllers/admin.controller.js";
