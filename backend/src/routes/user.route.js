@@ -20,8 +20,8 @@ router.put("/addresses/:addressesId", updateAddys)
 router.get("/addresses/:addressesId", deleteAddys)
 
 
-router.post("/addresses", addWishes)
-router.post("/addresses", deleteWishes)
-router.post("/addresses", getWishes)
+router.post("/wishlist", addWishes)
+router.delete("/wishlist/:productId", deleteWishes)
+router.get("/wishlist", getWishes)
 
 export default router;

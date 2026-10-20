@@ -7,6 +7,10 @@ export async function addAddys(req, res) {
 
         const user = req.user;
 
+        if (!fullName || !streetAddress || !city || !state || !zip || !phoneNumber) {
+            return res.status(400).json({message: "Missing a required field"});
+        }
+
         if(isDeafult){
             user.addresses.forEach((address)=>{
                 address.isDeafult = false;
@@ -101,7 +105,7 @@ export async function deleteAddys(req, res) {
 
 }
 
-export async function getWishes(req, res) {
+export async function addWishes(req, res) {
     try {
         const {productId} = req.body;
         const user = req.user;
@@ -140,9 +144,9 @@ export async function deleteWishes(req, res) {
     }
 }
 
-export async function addWishes(req, res) {
+export async function getWishes(req, res) {
     try{
-        const user = req.user;
+        const user = await User.findById(req.user_id).populate("wishlist");
         res.status(200).json({wishlist: user.wishlist});
 
     } catch (error) {
