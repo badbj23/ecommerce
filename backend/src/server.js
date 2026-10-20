@@ -10,6 +10,7 @@ import { Webhook } from "svix";
 import { fileURLToPath } from "url";
 import fs from "fs";
 import adminRoute from "./routes/admin.route.js";
+import userRoute from "./routes/user.route.js";
 
 const app = express();
 
@@ -106,6 +107,7 @@ app.use(
 );
 
 app.use("/api/admin", adminRoute)
+app.use("/api/users", userRoute)
 
 app.get("/api/health", (req, res) => {
     res.status(200).json({
