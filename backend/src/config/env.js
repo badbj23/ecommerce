@@ -12,4 +12,5 @@ export const ENV = {
     CLOUD_SECRET_KEY:process.env.CLOUD_SECRET_KEY,
     CLOUD_NAME:process.env.CLOUD_NAME,
     INNGEST_KEY: process.env.INNGEST_KEY,
+    ADMIN_EMAIL: process.env.ADMIN_EMAIL,
 };

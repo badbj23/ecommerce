@@ -9,6 +9,7 @@ import cors from "cors";
 import { Webhook } from "svix";
 import { fileURLToPath } from "url";
 import fs from "fs";
+import adminRoute from "./routes/admin.route.js";
 
 const app = express();
 
@@ -103,6 +104,8 @@ app.use(
         functions: functions,
     })
 );
+
+app.use("/api/admin", adminRoute)
 
 app.get("/api/health", (req, res) => {
     res.status(200).json({
