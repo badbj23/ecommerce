@@ -43,12 +43,20 @@ export async function createReview(req, res) {
             rating,
         });
 
-        const product = await Product.findById(productId)
+
         const reviews = await Review.find({ productId })
         const totalRating = reviews.reduce((sum, rev) => sum + rev.rating, 0);
-        product.averageRating = totalRating / reviews.length;
-        product.totalReviews = reviews.length;
-        await product.save();
+        const upProduct = await Product.findByIdAndUpdate( productId, {
+            averageRating: totalRating / reviews.length,
+            totalReviews: reviews.length,
+        },
+        { new: true, runValidators: true }
+    );
+
+        if(!upProduct) {
+            await Review.findByIdAndDelete(review._id);
+            return res.status(400).json({message: "Product not found"});
+        }
 
         res.status(200).json({message: "Successfully created review"});
 
