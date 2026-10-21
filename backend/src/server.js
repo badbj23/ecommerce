@@ -11,7 +11,10 @@ import { fileURLToPath } from "url";
 import fs from "fs";
 import adminRoute from "./routes/admin.route.js";
 import userRoute from "./routes/user.route.js";
-import {orderRoutes} from "./routes/orders.route.js";
+import ordersRoute from "./routes/orders.route.js";
+import reviewRoute from "./routes/reviews.route.js";
+import productRoute from "./routes/product.route.js";
+
 
 const app = express();
 
@@ -109,7 +112,9 @@ app.use(
 
 app.use("/api/admin", adminRoute)
 app.use("/api/users", userRoute)
-app.use("/api/orders", orderRoutes)
+app.use("/api/orders", ordersRoute)
+app.use("/api/products", productRoute)
+app.use("/api/reviews", reviewRoute)
 
 app.get("/api/health", (req, res) => {
     res.status(200).json({
