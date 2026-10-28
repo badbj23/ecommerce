@@ -13,4 +13,5 @@ export const ENV = {
     CLOUD_NAME:process.env.CLOUD_NAME,
     INNGEST_KEY: process.env.INNGEST_KEY,
     ADMIN_EMAIL: process.env.ADMIN_EMAIL,
+    CLIENT_URL: process.env.CLIENT_URL,
 };

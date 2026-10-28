@@ -14,6 +14,7 @@ import userRoute from "./routes/user.route.js";
 import ordersRoute from "./routes/orders.route.js";
 import reviewRoute from "./routes/reviews.route.js";
 import productRoute from "./routes/product.route.js";
+import cartRoute from "./routes/cart.route.js";
 
 
 const app = express();
@@ -54,7 +55,7 @@ console.log(
         : "MISSING"
 );
 
-app.use(cors());
+app.use(cors({origin:ENV.CLIENT_URL, credentials: true}));
 
 app.use(
     clerkMiddleware({
@@ -115,6 +116,7 @@ app.use("/api/users", userRoute)
 app.use("/api/orders", ordersRoute)
 app.use("/api/products", productRoute)
 app.use("/api/reviews", reviewRoute)
+app.use("/api/cart", cartRoute)
 
 app.get("/api/health", (req, res) => {
     res.status(200).json({
