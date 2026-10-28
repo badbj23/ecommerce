@@ -1,5 +1,6 @@
 import { Router } from "express";
 import {protectedRoute} from "../middle/auth.middle.js";
+import {createReview, deleteReview} from "../controllers/review.controller.js";
 
 const router = Router();
 
