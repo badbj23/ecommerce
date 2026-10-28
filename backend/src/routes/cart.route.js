@@ -2,7 +2,7 @@ import { Router } from "express"
 import {protectedRoute} from "../middle/auth.middle.js";
 import {updateOrder} from "../controllers/admin.controller.js";
 import {createOrders, getUserOrder} from "../controllers/order.controller.js";
-import {addToCart, deleteFromCart, getCart, updateCart} from "../controllers/cart.controller.js";
+import {addToCart, clearCart, deleteFromCart, getCart, updateCart} from "../controllers/cart.controller.js";
 
 const router = Router()
 
